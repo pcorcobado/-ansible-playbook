@@ -1,0 +1,5 @@
+- hosts: "{{ target }}"
+  strategy: linear
+  #serial: 5
+  roles:
+    - { role: deploy_filetransfer, become: "{{ 'yes' if (user is defined) else 'no' }}", become_method: su, become_exe: 'sudo su -', become_user: "{{ user if (user is defined) else 'nobody' }}" }
