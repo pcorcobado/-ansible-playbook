@@ -1,0 +1,20 @@
+# Checking if vars are defined
+- name: Check if PATH_DEST is defined
+  ansible.builtin.fail:
+    msg: PATH_DEST isn't defined in the inventory
+  when: PATH_DEST is not defined
+  
+- name: Check if PATH_CONFIG is defined
+  ansible.builtin.fail:
+    msg: PATH_CONFIG isn't defined in the inventory
+  when: PATH_CONFIG is not defined
+  
+- name: Remove the last / from PATH_DEST
+  ansible.builtin.set_fact:
+    PATH_DEST: "{{ PATH_DEST | regex_replace('/$','') }}"
+  
+- debug:
+    msg: "PATH_DEST: {{ PATH_DEST }}"
+
+- debug:
+    msg: "PATH_CONFIG: {{ PATH_CONFIG }}"
