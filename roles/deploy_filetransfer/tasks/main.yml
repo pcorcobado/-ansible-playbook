@@ -1,1 +1,13 @@
-
+---
+  
+- name: Copy files to target
+  
+  block:
+  
+  # Checking if vars PATH_DEST and PATH_CONFIG are defined
+  - name: Checking vars
+    ansible.builtin.include_tasks: checkVars.yml
+    
+  # Deploy
+  - name: Deploy {{ artifactId }}
+    ansible.builtin.include_tasks: deploy.yml
