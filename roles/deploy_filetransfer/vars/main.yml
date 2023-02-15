@@ -1,1 +1,2 @@
-
+timestamp: "{{ ansible_date_time.iso8601_basic_short }}"
+path_tmp: "/var/tmp"
