@@ -1,0 +1,37 @@
+# Deploy src
+- block:
+    - name: Coping {{ artifactId }}-{{ version }}.zip to target
+      ansible.builtin.include_role:
+        name: common
+        tasks_from: copartfact
+
+    - name: Deployment src in {{ path_dest }}
+      ansible.builtin.copy:
+        src: "{{ directoryTmp.path }}/src/"
+        dest: "{{ PATH_DEST }}/{{ target }}"
+        remote_src: yes
+        directory_mode: yes
+        mode: preserve
+
+    - name: List all files in src for permissions
+      become: no
+      ansible.builtin.find:
+        paths: "src/"
+        recurse: yes
+      register: listFilesForPersmissions
+      delegate_to: localhost
+  when: (PATH_DEST | length > 0)
+
+# Deploy config
+- block:
+    - name: Check if exists vault/sensitive_data.yml
+      become: no
+      ansible.builtin.stat:
+        path: "inventory/{{ target }}/vault/sensitive_data.yml"
+      register: checkSensitiveData
+      delegate_to: localhost
+
+    - name: Charge vars with sensitive data
+      ansible.builtin.include_vars: "inventory/{{ target }}/vault/sensitive_data.yml"
+      when: checkSensitiveData.stat.exists
+  when: (PATH_CONFIG | length > 0)
