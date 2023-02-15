@@ -1,0 +1,27 @@
+- name: Create temporary directory
+  ansible.builtin.tempfile:
+    state: directory
+    path: "{{ path_tmp }}"
+  register: directoryTmp
+
+- name: Coping {{ artifactId }}-{{ version }}.zip to {{ directoryTmp.path }}
+  ansible.builtin.copy:
+    src: "{{ workspace }}/{{ artifactId }}-{{ version }}.zip"
+    dest: "{{ directoryTmp.path }}/"
+
+- name: Unzip {{ artifactId }}-{{ version }}.zip
+  ansible.builtin.unarchive:
+    src: "{{ directoryTmp.path }}/{{ artifactId }}-{{ version }}.zip"
+    dest: "{{ directoryTmp.path }}"
+    remote_src: yes
+
+- name: Creating directory {{ directoryTmp.path }}/src
+  ansible.builtin.file:
+    path: "{{ directoryTmp.path }}/src"
+    state: directory
+
+- name: Unzip src.zip to {{ directoryTmp.path }}/src
+  ansible.builtin.unarchive:
+    src: "{{ directoryTmp.path }}/src.zip"
+    dest: "{{ directoryTmp.path }}/src"
+    remote_src: yes
