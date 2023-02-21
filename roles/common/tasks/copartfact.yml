@@ -6,7 +6,7 @@
 
 - name: Coping {{ artifactId }}-{{ version }}.zip to {{ directoryTmp.path }}
   ansible.builtin.copy:
-    src: "{{ workspace }}/{{ artifactId }}-{{ version }}.zip"
+    src: "{{ workspace }}/target/{{ artifactId }}-{{ version }}.zip"
     dest: "{{ directoryTmp.path }}/"
 
 - name: Unzip {{ artifactId }}-{{ version }}.zip
